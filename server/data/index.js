@@ -94,7 +94,7 @@ export const users = [
   },
   {
     _id: userIds[5],
-    firstName: "Harvey",ok
+    firstName: "Harvey",
     lastName: "Dunn",
     email: "harveydunn@gmail.com",
     password: "$2b$10$dsasdgsagasda//G9JxQ4bQ8KXf4OAIe/X/AK9skyWUy",
