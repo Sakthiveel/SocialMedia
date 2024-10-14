@@ -33,37 +33,32 @@ app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 //Initalizing imageKit:
-  const imagekit = new ImageKit(
-  {
-    publicKey:"public_IIvGTPn+8v1DnRbgnZKW3iPXKnQ=",
-    privateKey:"private_V3sd5RKcpc/uXKjnTnQoPBDse9g=",    
-    urlEndpoint:"https://ik.imagekit.io/zzkbvyzbb"
-  }
- )
+const imagekit = new ImageKit({
+  publicKey: "public_IIvGTPn+8v1DnRbgnZKW3iPXKnQ=",
+  privateKey: "private_V3sd5RKcpc/uXKjnTnQoPBDse9g=",
+  urlEndpoint: "https://ik.imagekit.io/zzkbvyzbb",
+});
 
-export const uploadImage = async(req,folderLocation)=>{
-  try{
+export const uploadImage = async (req, folderLocation) => {
+  try {
     const dateTime = giveCurrentDateTime();
-    const  file = req.file;
-    
-    //uploading image to imageKit to get the url
-    const {url:imageURL} = await imagekit.upload({
-      file:file.buffer,
-      fileName:file.originalname+" "+dateTime
-      ,folder: folderLocation,}
-      );
+    const file = req.file;
 
-    return imageURL;  
-  }
-  catch(err){
+    //uploading image to imageKit to get the url
+    const { url: imageURL } = await imagekit.upload({
+      file: file.buffer,
+      fileName: file.originalname + " " + dateTime,
+      folder: folderLocation,
+    });
+
+    return imageURL;
+  } catch (err) {
     throw err;
   }
- }
+};
 //Multer
 const multerStorage = multer.memoryStorage();
 const upload = multer({ multerStorage });
-
-
 
 /* ROUTES WITH FILES */
 app.post("/auth/register", upload.single("picture"), register);
@@ -71,16 +66,14 @@ app.post("/auth/register", upload.single("picture"), register);
 app.post("/posts", verifyToken, upload.single("picture"), createPost);
 // app.post("/posts", verifyToken, createPost);
 
-
-
 /* ROUTES */
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
-app.get('/search/:searchTerm',findUsers);
-app.get('/',(req,res)=>{
+app.get("/search/:searchTerm", findUsers);
+app.get("/", (req, res) => {
   res.send("Welcome to be backEnd Server");
-})
+});
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
@@ -90,6 +83,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
+    console.log("Db connected");
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
 
     /* ADD DATA ONE TIME */
@@ -98,11 +92,13 @@ mongoose
   })
   .catch((error) => console.log(`${error} did not connect`));
 
-
-  function giveCurrentDateTime () {
-    const today = new Date();
-    const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    const dateTime = date + ' ' + time;
-    return dateTime;
-  }
+function giveCurrentDateTime() {
+  const today = new Date();
+  const date =
+    today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+  const time =
+    today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  const dateTime = date + " " + time;
+  return dateTime;
+}
+console.log({ env });
