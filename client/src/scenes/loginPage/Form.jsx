@@ -16,8 +16,6 @@ import { setLogin } from "state";
 import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
 
-
-
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
   lastName: yup.string().required("required"),
@@ -59,43 +57,43 @@ const Form = () => {
 
   const register = async (values, onSubmitProps) => {
     // this allows us to send form info with image
-    try{
-    const formData = new FormData();
-    for (let value in values) {
-      formData.append(value, values[value]);
-    }
-    formData.append("picturePath", values.picture.name);
-
-    const savedUserResponse = await fetch(
-      `${process.env.REACT_APP_API_BASE_URL}auth/register`,
-      {
-        method: "POST",
-        body: formData,
+    try {
+      const formData = new FormData();
+      for (let value in values) {
+        formData.append(value, values[value]);
       }
-    );
-    const savedUser = await savedUserResponse.json();
-    onSubmitProps.resetForm();
+      formData.append("picturePath", values.picture.name);
 
-    if (savedUser) {
-      setPageType("login");
+      const savedUserResponse = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}auth/register`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      console.log("register user", { savedUserResponse });
+      const savedUser = await savedUserResponse.json();
+      onSubmitProps.resetForm();
+
+      if (savedUser) {
+        setPageType("login");
+      }
+    } catch (err) {
+      console.log(err.message);
     }
-  }
-  catch(err){
-    console.log(err.message);
-  }
   };
   console.log(process.env.REACT_APP_API_BASE_URL);
   const login = async (values, onSubmitProps) => {
-    
     try {
-      const loggedInResponse = await fetch(`${process.env.REACT_APP_API_BASE_URL}auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
-  
-      
-      
+      const loggedInResponse = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}auth/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(values),
+        }
+      );
+
       const loggedIn = await loggedInResponse.json();
       onSubmitProps.resetForm();
       if (loggedIn) {
@@ -107,8 +105,7 @@ const Form = () => {
         );
         navigate("/home");
       }
-    }
-    catch(err){
+    } catch (err) {
       console.log(err);
       console.log(err.message);
     }
@@ -148,9 +145,9 @@ const Form = () => {
               <>
                 <TextField
                   label="First Name"
-                  onBlur={handleBlur}     
+                  onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.firstName || ''}
+                  value={values.firstName || ""}
                   // value={this.state.name || ''}
                   name="firstName"
                   error={
@@ -163,7 +160,7 @@ const Form = () => {
                   label="Last Name"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.lastName || ''}
+                  value={values.lastName || ""}
                   name="lastName"
                   error={Boolean(touched.lastName) && Boolean(errors.lastName)}
                   helperText={touched.lastName && errors.lastName}
@@ -173,7 +170,7 @@ const Form = () => {
                   label="Location"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.location || ''}
+                  value={values.location || ""}
                   name="location"
                   error={Boolean(touched.location) && Boolean(errors.location)}
                   helperText={touched.location && errors.location}
@@ -183,7 +180,7 @@ const Form = () => {
                   label="Occupation"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.occupation || ''}
+                  value={values.occupation || ""}
                   name="occupation"
                   error={
                     Boolean(touched.occupation) && Boolean(errors.occupation)
@@ -231,7 +228,7 @@ const Form = () => {
               label="Email"
               onBlur={handleBlur}
               onChange={handleChange}
-              value={values.email || ''}
+              value={values.email || ""}
               name="email"
               error={Boolean(touched.email) && Boolean(errors.email)}
               helperText={touched.email && errors.email}
@@ -242,7 +239,7 @@ const Form = () => {
               type="password"
               onBlur={handleBlur}
               onChange={handleChange}
-              value={values.password || ''}
+              value={values.password || ""}
               name="password"
               error={Boolean(touched.password) && Boolean(errors.password)}
               helperText={touched.password && errors.password}

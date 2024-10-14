@@ -6,16 +6,14 @@ import { uploadImage } from "../index.js";
 /* REGISTER USER */
 export const register = async (req, res) => {
   try {
-    
     //upload userProfile image to imageKit:
-    const imageURL = await uploadImage(req,'/userProfilePicture');
+    const imageURL = await uploadImage(req, "/userProfilePicture");
 
-    
     const {
       firstName,
       lastName,
       email,
-      password,      
+      password,
       friends,
       location,
       occupation,
@@ -23,13 +21,13 @@ export const register = async (req, res) => {
 
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
-    
+
     const newUser = new User({
       firstName,
       lastName,
       email,
       password: passwordHash,
-      picturePath:imageURL,
+      picturePath: imageURL,
       friends,
       location,
       occupation,
@@ -48,6 +46,7 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log("login", req.body);
     const user = await User.findOne({ email: email });
     if (!user) return res.status(400).json({ msg: "User does not exist. " });
 
