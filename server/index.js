@@ -101,4 +101,4 @@ function giveCurrentDateTime() {
   const dateTime = date + " " + time;
   return dateTime;
 }
-console.log({ env });
+console.log({ evns: process.env });
